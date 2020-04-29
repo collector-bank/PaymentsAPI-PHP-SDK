@@ -1,0 +1,11 @@
+{
+  "name": "webbhuset/collector-payment-sdk",
+  "autoload": {
+    "psr-4": {
+      "Webbhuset\\CollectorPaymentSDK\\": "src"
+    }
+  },
+  "description": "SDK for Collector Bank Payment API",
+  "type": "library",
+  "require": {}
+}
