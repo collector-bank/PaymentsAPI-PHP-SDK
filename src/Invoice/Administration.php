@@ -52,7 +52,9 @@ class Administration
             'InvoiceNo'     => $invoiceNo,
             'ArticleList'   => $articleList->getArticleList()
         ];
-        $response = $this->adapter->partActivateInvoice($data);
+        $idempotencyKey = $invoiceNo;
+
+        $response = $this->adapter->partActivateInvoice($data, $idempotencyKey);
 
         return $response;
     }

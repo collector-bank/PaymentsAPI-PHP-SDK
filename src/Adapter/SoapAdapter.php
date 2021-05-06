@@ -79,7 +79,6 @@ class SoapAdapter implements AdapterInterface
         return $response;
     }
 
-
     public function getInvoiceInformation(array $data): array
     {
         $bodyData = array_merge($data, $this->baseBodyData);
@@ -90,24 +89,21 @@ class SoapAdapter implements AdapterInterface
         return $response;
     }
 
-
     private function getInvoiceServiceUrl(): string
     {
         if ($this->config->isTestMode()) {
-
             return $this->testInvoiceServiceUrl;
         }
 
         return $this->invoiceServiceUrl;
     }
 
-
-    public function partActivateInvoice(array $data): array
+    public function partActivateInvoice(array $data, $idempotencyKey = ""): array
     {
         $bodyData = array_merge($data, $this->baseBodyData);
         $url = $this->getInvoiceServiceUrl();
 
-        $response = $this->sendRequest($url, $this->partActivateInvoiceFunction, $bodyData);
+        $response = $this->sendRequest($url, $this->partActivateInvoiceFunction, $bodyData, $idempotencyKey);
 
         return $response;
     }
@@ -130,7 +126,6 @@ class SoapAdapter implements AdapterInterface
         return $soapResponse;
     }
 
-
     private function getSoapHeader(): array
     {
         $ns = $this->invoiceServiceNamespace;
@@ -140,7 +135,6 @@ class SoapAdapter implements AdapterInterface
 
         return $header;
     }
-
 
     /**
      *
@@ -155,29 +149,36 @@ class SoapAdapter implements AdapterInterface
      *
      * @return array response
      */
-    public function sendRequest(string $url,string $action, array $bodyData): array
+    public function sendRequest(string $url, string $action, array $bodyData, $idempotencyKey = ""): array
     {
+        $clientOptions = $this->soapClientOptions;
+        if ($idempotencyKey != "") {
+            $clientOptions['stream_context'] = stream_context_create(
+                [
+                    'http' => [
+                        'header' => "Idempotency-Key: $idempotencyKey"
+                    ]
+                ]
+            );
+        }
 
         $soapClient = new \SoapClient(
             $url,
-            $this->soapClientOptions
+            $clientOptions
         );
 
         $header = $this->getSoapHeader();
         $soapClient->__setSoapHeaders($header);
 
-        try{
-            $response = $soapClient->__soapCall($action,[$bodyData]);
+        try {
+            $response = $soapClient->__soapCall($action, [$bodyData]);
 
             return $this->soapResponseToArray($response);
-
-        } catch (\SoapFault $e){
+        } catch (\SoapFault $e) {
             $lastRequest = (string)$soapClient->__getLastRequest();
-            $responseError = new ResponseError($e, $lastRequest,$e->getCode(),$e->getMessage());
+            $responseError = new ResponseError($e, $lastRequest, $e->getCode(), $e->getMessage());
 
             throw $responseError;
         }
     }
-
-
 }

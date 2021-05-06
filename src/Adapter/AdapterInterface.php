@@ -76,9 +76,10 @@ interface AdapterInterface
      * Part activate the invoice. . Returns response if success otherwise throws ResponseError
      *
      * @param array $data
+     * @param array $idempotencyKey
      * @return array
      */
-    public function partActivateInvoice(array $data):array;
+    public function partActivateInvoice(array $data, $idempotencyKey = ""):array;
 
     /**
      * Part credit the invoice. . Returns response if success otherwise throws ResponseError
