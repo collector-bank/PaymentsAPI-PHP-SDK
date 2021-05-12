@@ -27,9 +27,8 @@ class Administration
     public function partCreditInvoice(
         $invoiceNo,
         \Webbhuset\CollectorPaymentSDK\Invoice\Article\ArticleList $articleList,
-        $correlationId = 0): array
-    {
-
+        $correlationId = 0
+    ): array {
         $data = [
             'CorrelationId' => $correlationId,
             'CreditDate'    => date("Y-m-d"),
@@ -45,8 +44,8 @@ class Administration
     public function partActivateInvoice(
         $invoiceNo,
         \Webbhuset\CollectorPaymentSDK\Invoice\Article\ArticleList $articleList,
-        $correlationId = 0): array
-    {
+        $correlationId = 0
+    ): array {
         $data = [
             'CorrelationId' => $correlationId,
             'InvoiceNo'     => $invoiceNo,
@@ -62,8 +61,8 @@ class Administration
     public function adjustInvoice(
         $invoiceNo,
         $invoiceRows,
-        $correlationId = 0): array
-    {
+        $correlationId = 0
+    ): array {
         $data = [
             'CorrelationId' => $correlationId,
             'InvoiceNo'     => $invoiceNo,
@@ -96,7 +95,6 @@ class Administration
         return $response;
     }
 
-
     public function creditInvoice($invoiceNo, $correlationId = 0): array
     {
         $data = [
@@ -108,7 +106,6 @@ class Administration
 
         return $response;
     }
-
 
     public function getInvoiceInformation($invoiceNo, $clientIpAddress, $correlationId = 0): array
     {
@@ -126,5 +123,4 @@ class Administration
 
         return $response;
     }
-
 }

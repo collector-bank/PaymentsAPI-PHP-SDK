@@ -2,7 +2,7 @@
 
 namespace Webbhuset\CollectorPaymentSDK\Invoice\Article;
 
-use Webbhuset\CollectorPaymentSDK\Adapter\AdapterInterface as AdapterInterface;
+use Webbhuset\CollectorPaymentSDK\Invoice\Rows\InvoiceRows;
 
 class ArticleList
 {
@@ -10,7 +10,6 @@ class ArticleList
 
     public function __construct()
     {
-
     }
 
     public function addArticle($article)
@@ -22,7 +21,6 @@ class ArticleList
     {
         foreach ($this->articles as $article) {
             if ($sku == $article->getSku()) {
-
                 return $article;
             }
         }
@@ -34,8 +32,7 @@ class ArticleList
     {
         $result = [];
         foreach ($this->articles as $article) {
-            if ("Currency rounding" != $article->getSku())
-            {
+            if (\Webbhuset\CollectorCheckout\Gateway\Config::CURRENCY_ROUNDING_SKU != $article->getSku()) {
                 $result[] = $article;
             }
         }
@@ -45,12 +42,23 @@ class ArticleList
 
     public function getDecimalRounding()
     {
-        return $this->getArticleBySku("Currency rounding");
+        return $this->getArticleBySku(\Webbhuset\CollectorCheckout\Gateway\Config::CURRENCY_ROUNDING_SKU);
     }
 
     public function getShippingArticle()
     {
         return $this->getArticleBySku("");
+    }
+
+    public function getInvoiceRows():InvoiceRows
+    {
+        $invoiceRows = new InvoiceRows();
+        /** @var Article $article */
+        foreach ($this->articles as $article) {
+            $invoiceRows->addInvoiceRow($article->toAdjustInvoiceRow());
+        }
+
+        return $invoiceRows;
     }
 
     public function getArticleList()

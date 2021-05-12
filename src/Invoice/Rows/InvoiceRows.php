@@ -8,11 +8,6 @@ class InvoiceRows
 {
     protected $invoiceRows = [];
 
-    public function __construct()
-    {
-
-    }
-
     public function addInvoiceRow(\Webbhuset\CollectorPaymentSDK\Invoice\Rows\InvoiceRow $invoiceRow)
     {
         $this->invoiceRows[] = $invoiceRow;
@@ -26,5 +21,10 @@ class InvoiceRows
         }
 
         return $result;
+    }
+
+    public function toArray()
+    {
+        return $this->getInvoiceRows();
     }
 }

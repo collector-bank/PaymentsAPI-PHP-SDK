@@ -2,7 +2,7 @@
 
 namespace Webbhuset\CollectorPaymentSDK\Invoice\Article;
 
-use Webbhuset\CollectorPaymentSDK\Adapter\AdapterInterface as AdapterInterface;
+use Webbhuset\CollectorPaymentSDK\Invoice\Rows\InvoiceRow;
 
 class Article
 {
@@ -10,17 +10,23 @@ class Article
     protected $description;
     protected $quantity;
     protected $sku;
+    protected $unitPrice;
+    protected $vat;
 
     public function __construct(
         string $articleId,
         string $description,
         int $quantity,
-        string $sku=""
+        string $sku="",
+        float $unitPrice = 0,
+        float $vat = 0
     ) {
         $this->articleId    = $articleId;
         $this->description  = $description;
         $this->quantity     = $quantity;
         $this->sku          = $sku;
+        $this->unitPrice    = $unitPrice;
+        $this->vat          = $vat;
     }
 
     /**
@@ -86,6 +92,30 @@ class Article
     {
         $this->quantity = $quantity;
     }
+
+    public function toInvoiceRow()
+    {
+        return new InvoiceRow(
+            (string) $this->articleId,
+            (string) $this->description,
+            (int) $this->quantity,
+            (float) $this->unitPrice,
+            (float) $this->vat
+        );
+    }
+
+
+    public function toAdjustInvoiceRow()
+    {
+        return new InvoiceRow(
+            (string) $this->articleId,
+            (string) $this->description,
+            (int) $this->quantity,
+            (float) $this->unitPrice * (-1),
+            (float) $this->vat
+        );
+    }
+
 
     public function toArray()
     {
