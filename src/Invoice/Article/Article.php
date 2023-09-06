@@ -123,6 +123,7 @@ class Article
             'ArticleId'     => $this->articleId,
             'Description'   => $this->description,
             'Quantity'      => $this->quantity,
+            'UnitPrice'     => $this->unitPrice,
         ];
     }
 }
