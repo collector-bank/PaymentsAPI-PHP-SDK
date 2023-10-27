@@ -29,6 +29,14 @@ interface ConfigInterface
 
     /**
      *
+     * Gets access key
+     *
+     * @return string $accessKey
+     */
+    public function getAccessKey(): string;
+
+    /**
+     *
      * Gets the storeId
      *
      * @return int storeId
