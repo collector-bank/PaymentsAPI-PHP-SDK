@@ -13,13 +13,16 @@ class Article
     protected $unitPrice;
     protected $vat;
 
+    protected $type;
+
     public function __construct(
         string $articleId,
         string $description,
         int $quantity,
         string $sku="",
         float $unitPrice = 0,
-        float $vat = 0
+        float $vat = 0,
+        string $type = "purchase"
     ) {
         $this->articleId    = $articleId;
         $this->description  = $description;
@@ -27,6 +30,7 @@ class Article
         $this->sku          = $sku;
         $this->unitPrice    = $unitPrice;
         $this->vat          = $vat;
+        $this->type         = $type;
     }
 
     /**
@@ -43,6 +47,22 @@ class Article
     public function setSku(string $sku)
     {
         $this->sku = $sku;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type)
+    {
+        $this->type = $type;
     }
 
     /**
@@ -100,7 +120,8 @@ class Article
             (string) $this->description,
             (int) $this->quantity,
             (float) $this->unitPrice,
-            (float) $this->vat
+            (float) $this->vat,
+            (string) $this->type,
         );
     }
 
@@ -112,7 +133,8 @@ class Article
             (string) $this->description,
             (int) $this->quantity,
             (float) $this->unitPrice * (-1),
-            (float) $this->vat
+            (float) $this->vat,
+            (string) $this->type
         );
     }
 
@@ -124,6 +146,8 @@ class Article
             'Description'   => $this->description,
             'Quantity'      => $this->quantity,
             'UnitPrice'     => $this->unitPrice,
+            'Type'          => $this->type,
+            'VAT'           => $this->vat,
         ];
     }
 }
