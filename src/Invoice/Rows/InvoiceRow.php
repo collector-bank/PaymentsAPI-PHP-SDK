@@ -3,6 +3,7 @@
 namespace Webbhuset\CollectorPaymentSDK\Invoice\Rows;
 
 use Webbhuset\CollectorPaymentSDK\Adapter\AdapterInterface as AdapterInterface;
+use Webbhuset\CollectorPaymentSDK\Invoice\Article\Article;
 
 class InvoiceRow
 {
@@ -11,19 +12,22 @@ class InvoiceRow
     protected $quantity;
     protected $unitPrice;
     protected $vat;
+    protected $type;
 
     public function __construct(
         string $articleId,
         string $description,
         int $quantity,
         float $unitPrice,
-        float $vat
+        float $vat,
+        string $type = 'Purchase'
     ) {
         $this->articleId    = $articleId;
         $this->description  = $description;
         $this->quantity     = $quantity;
         $this->unitPrice    = $unitPrice;
         $this->vat          = $vat;
+        $this->type         = $type;
     }
 
     /**
@@ -45,9 +49,38 @@ class InvoiceRow
     /**
      * @return string
      */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    public function toArticle(): Article
+    {
+        return new Article(
+            (string) $this->articleId,
+            (string) $this->description,
+            (int) $this->quantity,
+            (string) $this->articleId,
+            (float) $this->unitPrice,
+            (float) $this->vat,
+            (string) $this->type
+        );
     }
 
     /**
@@ -113,7 +146,8 @@ class InvoiceRow
             'Description'   => $this->description,
             'Quantity'      => $this->quantity,
             'UnitPrice'     => $this->unitPrice,
-            'VAT'           => $this->vat
+            'VAT'           => $this->vat,
+            'Type'          => $this->type
         ];
     }
 }
