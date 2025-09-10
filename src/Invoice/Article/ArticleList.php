@@ -47,7 +47,7 @@ class ArticleList
 
     public function getShippingArticle()
     {
-        return $this->getArticleBySku("");
+        return $this->getArticleBySku("Frakt");
     }
 
     public function getInvoiceRows():InvoiceRows
