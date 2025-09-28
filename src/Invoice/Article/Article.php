@@ -106,6 +106,14 @@ class Article
     }
 
     /**
+     * @return float|int
+     */
+    public function getUnitPrice()
+    {
+        return $this->unitPrice;
+    }
+
+    /**
      * @param int $quantity
      */
     public function setQuantity(int $quantity)
