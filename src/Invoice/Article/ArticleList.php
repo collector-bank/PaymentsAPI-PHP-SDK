@@ -28,6 +28,17 @@ class ArticleList
         return false;
     }
 
+    public function getDiscountArticleBySku($sku)
+    {
+        foreach ($this->articles as $article) {
+            if ($sku == $article->getSku() && $article->getUnitPrice() < 0) {
+                return $article;
+            }
+        }
+
+        return false;
+    }
+
     public function removeDecimalRounding()
     {
         $result = [];
