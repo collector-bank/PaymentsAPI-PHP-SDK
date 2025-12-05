@@ -9,23 +9,6 @@ namespace Webbhuset\CollectorPaymentSDK\Config;
  */
 interface ConfigInterface
 {
-    /**
-     *
-     * Gets the username
-     *
-     * @return string $username
-     */
-    public function getUsername(): string;
-
-
-    /**
-     *
-     * Gets the password
-     *
-     * @return string $password
-     */
-    public function getPassword(): string;
-
 
     /**
      *
