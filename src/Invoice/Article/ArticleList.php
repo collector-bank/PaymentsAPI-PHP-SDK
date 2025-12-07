@@ -28,10 +28,46 @@ class ArticleList
         return false;
     }
 
+    /**
+     * Get article by SKU and remove it from the list to prevent duplicate matches
+     *
+     * @param string $sku
+     * @return Article|false
+     */
+    public function getAndRemoveArticleBySku($sku)
+    {
+        foreach ($this->articles as $key => $article) {
+            if ($sku == $article->getSku()) {
+                unset($this->articles[$key]);
+                return $article;
+            }
+        }
+
+        return false;
+    }
+
     public function getDiscountArticleBySku($sku)
     {
         foreach ($this->articles as $article) {
             if ($sku == $article->getSku() && $article->getUnitPrice() < 0) {
+                return $article;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get discount article by SKU and remove it from the list to prevent duplicate matches
+     *
+     * @param string $sku
+     * @return Article|false
+     */
+    public function getAndRemoveDiscountArticleBySku($sku)
+    {
+        foreach ($this->articles as $key => $article) {
+            if ($sku == $article->getSku() && $article->getUnitPrice() < 0) {
+                unset($this->articles[$key]);
                 return $article;
             }
         }
@@ -58,7 +94,7 @@ class ArticleList
 
     public function getShippingArticle()
     {
-        return $this->getArticleBySku("Frakt") ?: $this->getArticleBySku("Fragt");
+        return $this->getArticleBySku("Frakt") ?: $this->getArticleBySku("Fragt") ?: $this->getArticleBySku("Toimituskulut");
     }
 
     public function getInvoiceRows():InvoiceRows
